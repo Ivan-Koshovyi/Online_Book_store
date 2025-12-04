@@ -1,7 +1,7 @@
 package store.service;
 
-import store.model.Book;
 import java.util.List;
+import store.model.Book;
 
 public interface BookService {
     Book save(Book book);
