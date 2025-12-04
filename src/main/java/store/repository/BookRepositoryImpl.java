@@ -4,7 +4,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import store.model.Book;
@@ -31,7 +30,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't insert book in DB" + e);
+            throw new RuntimeException("Failed to insert book into the DB: " + e);
         } finally {
             if (session != null) {
                 session.close();
@@ -43,10 +42,9 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Book> fromBook = session.createQuery("from Book", Book.class);
-            return fromBook.getResultList();
+            return session.createQuery("from Book", Book.class).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't select books with DB" + e);
+            throw new RuntimeException("Cannot select books from the database: " + e);
         }
     }
 }
