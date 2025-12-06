@@ -22,7 +22,7 @@ public class Application {
     public CommandLineRunner commandLineRunner() {
         return new CommandLineRunner() {
             @Override
-            public void run(String... args) throws Exception {
+            public void run(String... args) {
                 Book book = new Book();
                 book.setAuthor("Author");
                 book.setIsbn("1234");
