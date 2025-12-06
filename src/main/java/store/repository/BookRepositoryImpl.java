@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import store.exception.DataProcessingException;
 import store.model.Book;
 
 @Repository
@@ -30,7 +31,8 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Failed to insert book into the DB: " + e);
+            throw new DataProcessingException("Failed to insert book:"
+                    + book.getTitle() + " into the DB", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -44,7 +46,7 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Book", Book.class).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Cannot select books from the database: " + e);
+            throw new DataProcessingException("Cannot select books from the database", e);
         }
     }
 }
