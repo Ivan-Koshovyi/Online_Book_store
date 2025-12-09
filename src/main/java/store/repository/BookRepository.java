@@ -2,8 +2,6 @@ package store.repository;
 
 import java.util.List;
 import java.util.Optional;
-
-import store.dto.BookDto;
 import store.model.Book;
 
 public interface BookRepository {
