@@ -6,5 +6,5 @@ import store.model.Book;
 public interface BookRepository {
     Book save(Book book);
 
-    List<Book> getAll();
+    List<Book> findAll();
 }
