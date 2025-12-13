@@ -1,6 +1,7 @@
 package store.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -42,9 +43,19 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> getAll() {
+    public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Book", Book.class).getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Cannot select books from the database", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Book book = session.find(Book.class, id);
+            return Optional.ofNullable(book);
         } catch (Exception e) {
             throw new DataProcessingException("Cannot select books from the database", e);
         }
