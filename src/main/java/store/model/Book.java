@@ -10,11 +10,15 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Setter
 @Getter
+@SQLRestriction("is_deleted = false")
 @ToString
+@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @Table(name = "books")
 public class Book {
     @Id
@@ -33,4 +37,7 @@ public class Book {
 
     private String description;
     private String coverImage;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }
