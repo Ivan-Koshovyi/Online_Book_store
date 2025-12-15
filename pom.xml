@@ -58,6 +58,16 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-maven-plugin</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -85,6 +95,18 @@
                             <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/db-changelog-master.yaml</changeLogFile>
+                    <url>jdbc:mysql://localhost:3306/book?serverTimezone=UTC</url>
+                    <username>root</username>
+                    <password>Mister-1234</password>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
                 </configuration>
             </plugin>
             <plugin>
