@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,14 +38,9 @@ public class BookController {
         return bookService.findById(id);
     }
 
-    @PatchMapping("/{id}")
-    public BookDto patchBook(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
-        return bookService.patchById(id, bookDto);
-    }
-
     @PutMapping("/{id}")
     public BookDto updateBook(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
-        return bookService.updateById(id, bookDto);
+        return bookService.updateBook(id, bookDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
