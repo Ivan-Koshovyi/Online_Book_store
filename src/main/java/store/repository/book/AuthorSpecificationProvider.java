@@ -8,9 +8,11 @@ import store.repository.SpecificationProvider;
 
 @Component
 public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
+    private static final String AUTHOR = "author";
+
     @Override
     public String getKey() {
-        return "author";
+        return AUTHOR;
     }
 
     @Override

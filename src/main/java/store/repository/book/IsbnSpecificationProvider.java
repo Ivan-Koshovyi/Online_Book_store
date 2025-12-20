@@ -8,9 +8,11 @@ import store.repository.SpecificationProvider;
 
 @Component
 public class IsbnSpecificationProvider implements SpecificationProvider<Book> {
+    private static final String ISBN = "isbn";
+
     @Override
     public String getKey() {
-        return "isbn";
+        return ISBN;
     }
 
     public Specification<Book> getSpecification(String[] params) {

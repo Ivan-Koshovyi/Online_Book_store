@@ -9,6 +9,9 @@ import store.model.Book;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
+    private static final String AUTHOR = "author";
+    private static final String ISBN = "isbn";
+    private static final String TITLE = "title";
 
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
@@ -17,17 +20,17 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         Specification<Book> spec = (root, query, cb) -> cb.conjunction();
         if (searchParameters.author() != null && searchParameters.author().length > 0) {
             spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("author")
+                    .getSpecificationProvider(AUTHOR)
                     .getSpecification(searchParameters.author()));
         }
         if (searchParameters.title() != null && searchParameters.title().length > 0) {
             spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("title")
+                    .getSpecificationProvider(TITLE)
                     .getSpecification(searchParameters.title()));
         }
         if (searchParameters.isbn() != null && searchParameters.isbn().length > 0) {
             spec = spec.and(bookSpecificationProviderManager
-                    .getSpecificationProvider("isbn")
+                    .getSpecificationProvider(ISBN)
                     .getSpecification(searchParameters.isbn()));
         }
         return spec;
