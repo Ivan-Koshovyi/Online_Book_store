@@ -12,8 +12,8 @@ import store.service.UserService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "users")
-public class UserController {
+@RequestMapping(value = "/users")
+public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping
