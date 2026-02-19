@@ -2,9 +2,6 @@ package store.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import store.model.Role;
-
-import java.util.Set;
 
 @Getter
 @Setter
