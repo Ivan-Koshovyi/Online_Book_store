@@ -4,7 +4,7 @@ databaseChangeLog:
       author: ivankosh
       changes:
         - createTable:
-            tableName: role
+            tableName: roles
             ifNotExists: true
             columns:
               - column:
@@ -15,7 +15,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: role
+                  name: role_name
                   type: varchar(255)
                   constraints:
                     nullable: false
@@ -26,14 +26,14 @@ databaseChangeLog:
       author: ivankosh
       changes:
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column:
-                  name: role
+                  name: role_name
                   value: ROLE_USER
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column:
-                  name: role
+                  name: role_name
                   value: ROLE_ADMIN

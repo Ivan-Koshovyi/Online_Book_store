@@ -2,9 +2,7 @@ package store.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import store.lib.FieldMatch;
@@ -12,7 +10,7 @@ import store.lib.FieldMatch;
 @Getter
 @Setter
 @FieldMatch(first = "password", second = "repeatPassword")
-public class UserRequestDto {
+public class UserRegistrationRequestDto {
     @NotBlank
     @Email
     private String email;
@@ -26,8 +24,5 @@ public class UserRequestDto {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
     private String shippingAddress;
-    @NotEmpty
-    private Set<String> roles;
 }

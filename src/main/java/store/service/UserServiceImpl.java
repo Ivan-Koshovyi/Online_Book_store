@@ -2,11 +2,10 @@ package store.service;
 
 import jakarta.transaction.Transactional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import store.dto.UserRequestDto;
+import store.dto.UserRegistrationRequestDto;
 import store.dto.UserResponseDto;
 import store.exception.RegistrationExseption;
 import store.mapper.UserMapper;
@@ -25,20 +24,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto registerUser(UserRequestDto userRequestDto) {
-        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new RegistrationExseption("User already exists");
+    public UserResponseDto registerUser(UserRegistrationRequestDto userRegistrationRequestDto) {
+        if (userRepository.existsByEmail(userRegistrationRequestDto.getEmail())) {
+            throw new RegistrationExseption(
+                    "User already exists: "
+                            + userRegistrationRequestDto.getFirstName()
+                            + " (" + userRegistrationRequestDto.getEmail() + ")"
+            );
         }
-        User user = userMapper.toEntity(userRequestDto);
-        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        if (userRequestDto.getRoles() != null) {
-            Set<Role> roles = userRequestDto.getRoles().stream()
-                    .map(role -> roleRepository.findByRole(role)
-                            .orElseThrow(()
-                                    -> new IllegalArgumentException("Role not found: " + role)))
-                    .collect(Collectors.toSet());
-            user.setRoles(roles);
-        }
+        User user = userMapper.toEntity(userRegistrationRequestDto);
+        user.setPassword(passwordEncoder.encode(userRegistrationRequestDto.getPassword()));
+        Role userRole = roleRepository.findByRoleName(Role.RoleName.ROLE_USER)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: ROLE_USER"));
+        user.setRoles(Set.of(userRole));
         return userMapper.toDto(userRepository.save(user));
     }
 }
