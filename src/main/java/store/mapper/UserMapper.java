@@ -12,5 +12,5 @@ import store.model.User;
 public interface UserMapper {
     UserResponseDto toDto(User user);
 
-    User toEntity(UserRequestDto userResponseDto);
+    User toEntity(UserRequestDto userRequestDto);
 }
