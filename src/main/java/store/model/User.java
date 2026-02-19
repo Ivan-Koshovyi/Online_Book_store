@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,6 +40,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
     private String shippingAddress;
+    @Column(nullable = false)
+    private Set<Role> roles;
     @Column(nullable = false)
     private boolean isDeleted = false;
 
