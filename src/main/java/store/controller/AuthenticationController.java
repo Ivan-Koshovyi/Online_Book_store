@@ -16,7 +16,7 @@ import store.service.UserService;
 public class AuthenticationController {
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping(value = "/registration")
     public UserResponseDto registerUser(@Valid @RequestBody UserRequestDto user) {
         return userService.registerUser(user);
     }
