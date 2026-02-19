@@ -12,7 +12,7 @@ import store.service.UserService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/auth")
 public class AuthenticationController {
     private final UserService userService;
 
