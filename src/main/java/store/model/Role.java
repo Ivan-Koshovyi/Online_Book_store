@@ -27,10 +27,9 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return roleName.name(); // повертаємо назву enum як рядок
+        return roleName.name();
     }
 
-    // Enum всередині класу або окремо у файлі
     public enum RoleName {
         ROLE_USER,
         ROLE_ADMIN

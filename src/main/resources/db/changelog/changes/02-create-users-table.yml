@@ -31,7 +31,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: last_Name
+                  name: last_name
                   type: varchar(255)
                   constraints:
                     nullable: false
