@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,35 +26,40 @@ import store.service.BookService;
 @Tag(name = "Book management", description = "Endpoints for managing books")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping("/books")
 public class BookController {
 
     private final BookService bookService;
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Operation(summary = "Get all books")
     @GetMapping
     public Page<BookDto> findAll(Pageable pageable) {
         return bookService.getAll(pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Created books")
     @PostMapping
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Operation(summary = "Get book by id")
     @GetMapping("/{id}")
     public BookDto findBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @Operation(summary = "Get books for parameters")
     @GetMapping("/search")
     public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
         return bookService.searchBooks(searchParameters);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update book for id")
     @PutMapping("/{id}")
     public BookDto updateBook(@PathVariable Long id,
@@ -61,6 +67,7 @@ public class BookController {
         return bookService.updateBook(id, bookDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete book for id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")

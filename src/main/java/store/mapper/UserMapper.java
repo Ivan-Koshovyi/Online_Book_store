@@ -3,7 +3,7 @@ package store.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import store.config.MapperConfig;
-import store.dto.UserRequestDto;
+import store.dto.UserRegistrationRequestDto;
 import store.dto.UserResponseDto;
 import store.model.User;
 
@@ -12,5 +12,5 @@ import store.model.User;
 public interface UserMapper {
     UserResponseDto toDto(User user);
 
-    User toEntity(UserRequestDto userRequestDto);
+    User toEntity(UserRegistrationRequestDto userRequestDto);
 }

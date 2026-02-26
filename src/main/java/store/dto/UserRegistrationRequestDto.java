@@ -10,7 +10,7 @@ import store.lib.FieldMatch;
 @Getter
 @Setter
 @FieldMatch(first = "password", second = "repeatPassword")
-public class UserRequestDto {
+public class UserRegistrationRequestDto {
     @NotBlank
     @Email
     private String email;
@@ -24,6 +24,5 @@ public class UserRequestDto {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
     private String shippingAddress;
 }
