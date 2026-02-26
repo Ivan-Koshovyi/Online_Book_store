@@ -28,8 +28,6 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody UserLoginRequestDto request) {
-        System.out.println("Email received: " + request.getEmail());
-        System.out.println("Password received: " + request.getPassword());
         return authenticationService.authenticate(request);
     }
 }
