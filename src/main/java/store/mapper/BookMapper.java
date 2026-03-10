@@ -5,6 +5,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import store.config.MapperConfig;
 import store.dto.BookDto;
+import store.dto.BookDtoWithoutCategoryIds;
 import store.dto.CreateBookRequestDto;
 import store.model.Book;
 
@@ -17,4 +18,6 @@ public interface BookMapper {
                            @MappingTarget Book book);
 
     Book toModel(CreateBookRequestDto requestDto);
+
+    BookDtoWithoutCategoryIds toDtoWithoutCategory(Book book);
 }
