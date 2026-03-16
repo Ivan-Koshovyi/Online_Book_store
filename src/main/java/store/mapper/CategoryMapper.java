@@ -1,6 +1,7 @@
 package store.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import store.config.MapperConfig;
 import store.dto.CategoryDto;
@@ -10,6 +11,9 @@ import store.model.Category;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
+
+    void updateCategoryFromDto(CategoryDto dto,
+                           @MappingTarget Category category);
 
     Category toEntity(CategoryDto categoryDto);
 

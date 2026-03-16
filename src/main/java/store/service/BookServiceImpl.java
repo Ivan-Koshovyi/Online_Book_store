@@ -1,6 +1,8 @@
 package store.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +14,10 @@ import store.dto.CreateBookRequestDto;
 import store.exception.EntityNotFoundException;
 import store.mapper.BookMapper;
 import store.model.Book;
+import store.model.Category;
 import store.repository.BookRepository;
 import store.repository.BookSpecificationBuilder;
+import store.repository.CategoryRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +26,16 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder bookSpecificationBuilder;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
+        Set<Category> categories = categoryRepository.findAllById(requestDto.getCategoryIds())
+                .stream()
+                .collect(Collectors.toSet());
+
+        book.setCategories(categories);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -63,5 +73,12 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(bookSpecification).stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public Page<BookDto> getBooksByCategory(Long categoryId, Pageable pageable) {
+        return bookRepository
+                .findAllByCategories_Id(categoryId, pageable)
+                .map(bookMapper::toDto);
     }
 }
