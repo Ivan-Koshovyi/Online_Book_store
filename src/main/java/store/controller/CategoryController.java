@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,8 +38,8 @@ public class CategoryController {
     @Operation(summary = "Get all category")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
-    public List<CategoryDto> findAll() {
-        return categoryService.getAllCategories();
+    public Page<CategoryDto> findAll(Pageable pageable) {
+        return categoryService.getAllCategories(pageable);
     }
 
     @Operation(summary = "Get category for id")

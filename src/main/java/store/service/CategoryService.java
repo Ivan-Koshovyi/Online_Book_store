@@ -1,10 +1,11 @@
 package store.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import store.dto.CategoryDto;
 
 public interface CategoryService {
-    List<CategoryDto> getAllCategories();
+    Page<CategoryDto> getAllCategories(Pageable pageable);
 
     CategoryDto getCategoryById(long id);
 
