@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import store.dto.BookDto;
 import store.dto.CategoryDto;
+import store.dto.CreateCategoryRequest;
 import store.service.BookService;
 import store.service.CategoryService;
 
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Category management", description = "Endpoints for managing category")
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
@@ -31,8 +32,8 @@ public class CategoryController {
     @Operation(summary = "Create category")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping
-    public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
-        return categoryService.createNewCategory(categoryDto);
+    public CategoryDto createCategory(@RequestBody CreateCategoryRequest category) {
+        return categoryService.createNewCategory(category);
     }
 
     @Operation(summary = "Get all category")
@@ -52,7 +53,8 @@ public class CategoryController {
     @Operation(summary = "Update category for id")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{id}")
-    public CategoryDto updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+    public CategoryDto updateCategory(@PathVariable Long id,
+                                      @RequestBody CreateCategoryRequest categoryDto) {
         return categoryService.updateCategory(id, categoryDto);
     }
 

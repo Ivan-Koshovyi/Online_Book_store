@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dto.CategoryDto;
+import store.dto.CreateCategoryRequest;
 import store.exception.EntityNotFoundException;
 import store.mapper.CategoryMapper;
 import store.model.Category;
@@ -32,17 +33,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto createNewCategory(CategoryDto categoryDto) {
-        Category category = categoryRepository.save(categoryMapper.toEntity(categoryDto));
+    public CategoryDto createNewCategory(CreateCategoryRequest newCategory) {
+        Category category = categoryRepository.save(categoryMapper.toEntity(newCategory));
         return categoryMapper.toDto(category);
     }
 
     @Override
-    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
-        Category category = categoryRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Can't find category with id: " + id));
-        categoryMapper.updateCategoryFromDto(categoryDto, category);
-        return categoryMapper.toDto(categoryRepository.save(category));
+    public CategoryDto updateCategory(Long id, CreateCategoryRequest category) {
+        Category newCategory = categoryRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Can't find category with id: " + id));
+        categoryMapper.updateCategoryFromDto(category, newCategory);
+        return categoryMapper.toDto(categoryRepository.save(newCategory));
     }
 
     @Override
