@@ -1,6 +1,5 @@
 package store.mapper;
 
-import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -30,7 +29,7 @@ public interface BookMapper {
             bookDto.setCategoryIds(
                     book.getCategories().stream()
                             .map(Category::getId)
-                            .collect(Collectors.toList())
+                            .toList()
             );
         }
     }
