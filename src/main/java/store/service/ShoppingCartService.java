@@ -9,5 +9,9 @@ public interface ShoppingCartService {
 
     ShoppingCartDto getCartByUserId(String username);
 
-    boolean postItem(@Valid BookInCartDto book, String username);
+    CartItemDto postItem(@Valid BookInCartDto book, String username);
+
+    CartItemDto updateItem(Long id, int quantity);
+
+    void deleteItem(Long id);
 }

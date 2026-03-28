@@ -3,7 +3,6 @@ package store.dto;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import store.model.CartItem;
 
 @Getter
 @Setter

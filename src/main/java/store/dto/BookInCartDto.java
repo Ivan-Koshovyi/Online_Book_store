@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookInCartDto {
-    Long bookId;
-    int quantity;
+    private Long bookId;
+    private int quantity;
 }
