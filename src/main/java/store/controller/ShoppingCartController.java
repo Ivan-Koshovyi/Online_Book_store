@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import store.dto.BookInCartDto;
 import store.dto.CartItemDto;
 import store.dto.ShoppingCartDto;
+import store.dto.UpdateCartItemDto;
 import store.service.ShoppingCartService;
 
 @Tag(name = "Shopping cart", description = "Shopping cart for books")
@@ -31,29 +32,30 @@ public class ShoppingCartController {
     @Operation(summary = "Get shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
-    private ShoppingCartDto getShoppingCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ShoppingCartDto getShoppingCart(@AuthenticationPrincipal UserDetails userDetails) {
         return shoppingCartService.getCartByUserId(userDetails.getUsername());
     }
 
     @Operation(summary = "Put item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping
-    private CartItemDto postItemInCart(@RequestBody @Valid BookInCartDto book,
+    public CartItemDto postItemInCart(@RequestBody @Valid BookInCartDto book,
                                        @AuthenticationPrincipal UserDetails userDetails) {
         return shoppingCartService.postItem(book, userDetails.getUsername());
     }
 
     @Operation(summary = "Update item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @PutMapping("/items/{Id}")
-    private CartItemDto updateItemInCart(@PathVariable Long id, int quantity) {
-        return shoppingCartService.updateItem(id,quantity);
+    @PutMapping("/items/{id}")
+    public CartItemDto updateItemInCart(@PathVariable Long id,
+                                        @RequestBody UpdateCartItemDto request) {
+        return shoppingCartService.updateItem(id,request);
     }
 
     @Operation(summary = "Delete item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @DeleteMapping("/items/{Id}")
-    private void deleteItemInCart(@PathVariable Long id) {
+    @DeleteMapping("/items/{id}")
+    public void deleteItemInCart(@PathVariable Long id) {
         shoppingCartService.deleteItem(id);
     }
 }

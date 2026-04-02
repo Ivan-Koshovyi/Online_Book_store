@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import store.dto.BookInCartDto;
 import store.dto.CartItemDto;
 import store.dto.ShoppingCartDto;
+import store.dto.UpdateCartItemDto;
 import store.exception.BookNotFoundException;
 import store.exception.CartItemNotFoundExseption;
 import store.mapper.ShoppingCartMapper;
@@ -47,10 +48,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartItemDto updateItem(Long id, int quantity) {
+    public CartItemDto updateItem(Long id, UpdateCartItemDto request) {
         CartItem cartItem = cartItemRepository.findById(id).orElseThrow(
                 () -> new CartItemNotFoundExseption("Item not found"));
-        cartItem.setQuantity(quantity);
+        cartItem.setQuantity(request.getQuantity());
         return shoppingCartMapper.toDto(cartItemRepository.save(cartItem));
     }
 

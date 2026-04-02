@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import store.dto.BookInCartDto;
 import store.dto.CartItemDto;
 import store.dto.ShoppingCartDto;
+import store.dto.UpdateCartItemDto;
 
 public interface ShoppingCartService {
 
@@ -11,7 +12,7 @@ public interface ShoppingCartService {
 
     CartItemDto postItem(@Valid BookInCartDto book, String username);
 
-    CartItemDto updateItem(Long id, int quantity);
+    CartItemDto updateItem(Long id, UpdateCartItemDto request);
 
     void deleteItem(Long id);
 }
