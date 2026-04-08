@@ -1,18 +1,20 @@
 package store.service;
 
-import jakarta.validation.Valid;
-import store.dto.BookInCartDto;
 import store.dto.CartItemDto;
+import store.dto.CartItemRequestDto;
 import store.dto.ShoppingCartDto;
 import store.dto.UpdateCartItemDto;
+import store.model.User;
 
 public interface ShoppingCartService {
 
     ShoppingCartDto getCartByUserId(String username);
 
-    CartItemDto postItem(@Valid BookInCartDto book, String username);
+    CartItemDto postItem(CartItemRequestDto cartItemDto, String username);
 
-    CartItemDto updateItem(Long id, UpdateCartItemDto request);
+    CartItemDto updateItem(Long id, UpdateCartItemDto request, String username);
 
-    void deleteItem(Long id);
+    void deleteItem(Long id, String username);
+
+    void createShoppingCart(User user);
 }

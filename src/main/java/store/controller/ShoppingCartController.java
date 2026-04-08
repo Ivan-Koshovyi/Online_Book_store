@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import store.dto.BookInCartDto;
 import store.dto.CartItemDto;
+import store.dto.CartItemRequestDto;
 import store.dto.ShoppingCartDto;
 import store.dto.UpdateCartItemDto;
 import store.service.ShoppingCartService;
@@ -39,23 +39,25 @@ public class ShoppingCartController {
     @Operation(summary = "Put item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping
-    public CartItemDto postItemInCart(@RequestBody @Valid BookInCartDto book,
+    public CartItemDto postItemInCart(@RequestBody @Valid CartItemRequestDto cartItemDto,
                                        @AuthenticationPrincipal UserDetails userDetails) {
-        return shoppingCartService.postItem(book, userDetails.getUsername());
+        return shoppingCartService.postItem(cartItemDto, userDetails.getUsername());
     }
 
     @Operation(summary = "Update item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PutMapping("/items/{id}")
     public CartItemDto updateItemInCart(@PathVariable Long id,
-                                        @RequestBody UpdateCartItemDto request) {
-        return shoppingCartService.updateItem(id,request);
+                                            @RequestBody UpdateCartItemDto request,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        return shoppingCartService.updateItem(id, request, userDetails.getUsername());
     }
 
     @Operation(summary = "Delete item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @DeleteMapping("/items/{id}")
-    public void deleteItemInCart(@PathVariable Long id) {
-        shoppingCartService.deleteItem(id);
+    public void deleteCartItem(@PathVariable Long id,
+                               @AuthenticationPrincipal UserDetails userDetails) {
+        shoppingCartService.deleteItem(id, userDetails.getUsername());
     }
 }
