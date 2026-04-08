@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import store.dto.CartItemDto;
 import store.dto.CartItemRequestDto;
 import store.dto.ShoppingCartDto;
 import store.dto.UpdateCartItemDto;
@@ -39,7 +38,7 @@ public class ShoppingCartController {
     @Operation(summary = "Put item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping
-    public CartItemDto postItemInCart(@RequestBody @Valid CartItemRequestDto cartItemDto,
+    public ShoppingCartDto addCartItem(@RequestBody @Valid CartItemRequestDto cartItemDto,
                                        @AuthenticationPrincipal UserDetails userDetails) {
         return shoppingCartService.postItem(cartItemDto, userDetails.getUsername());
     }
@@ -47,7 +46,7 @@ public class ShoppingCartController {
     @Operation(summary = "Update item in shopping cart")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PutMapping("/items/{id}")
-    public CartItemDto updateItemInCart(@PathVariable Long id,
+    public ShoppingCartDto updateCartItem(@PathVariable Long id,
                                             @RequestBody UpdateCartItemDto request,
                                             @AuthenticationPrincipal UserDetails userDetails) {
         return shoppingCartService.updateItem(id, request, userDetails.getUsername());

@@ -1,6 +1,5 @@
 package store.service;
 
-import store.dto.CartItemDto;
 import store.dto.CartItemRequestDto;
 import store.dto.ShoppingCartDto;
 import store.dto.UpdateCartItemDto;
@@ -10,9 +9,9 @@ public interface ShoppingCartService {
 
     ShoppingCartDto getCartByUserId(String username);
 
-    CartItemDto postItem(CartItemRequestDto cartItemDto, String username);
+    ShoppingCartDto postItem(CartItemRequestDto cartItemDto, String username);
 
-    CartItemDto updateItem(Long id, UpdateCartItemDto request, String username);
+    ShoppingCartDto updateItem(Long id, UpdateCartItemDto request, String username);
 
     void deleteItem(Long id, String username);
 
