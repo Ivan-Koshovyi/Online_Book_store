@@ -47,7 +47,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PutMapping("/items/{id}")
     public ShoppingCartDto updateCartItem(@PathVariable Long id,
-                                            @RequestBody UpdateCartItemDto request,
+                                            @RequestBody @Valid UpdateCartItemDto request,
                                             @AuthenticationPrincipal UserDetails userDetails) {
         return shoppingCartService.updateItem(id, request, userDetails.getUsername());
     }
