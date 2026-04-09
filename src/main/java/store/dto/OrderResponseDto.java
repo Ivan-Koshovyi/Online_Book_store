@@ -1,18 +1,18 @@
 package store.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import store.model.OrderItem;
 
 @Getter
 @Setter
 public class OrderResponseDto {
-    private String orderId;
-    private String userId;
-    private OrderItem orderItems;
+    private Long id;
+    private Long userId;
+    private Set<OrderItemResponseDto> orderItems;
     private LocalDateTime orderDate;
-    private Long total;
+    private BigDecimal total;
     private String status;
-
 }

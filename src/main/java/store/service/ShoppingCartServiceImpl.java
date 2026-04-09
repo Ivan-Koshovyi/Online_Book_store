@@ -110,4 +110,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setUser(user);
         shoppingCartRepository.save(shoppingCart);
     }
+
+    @Override
+    public void clearCart(Long id) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"));
+        shoppingCart.getCartItems().clear();
+    }
 }

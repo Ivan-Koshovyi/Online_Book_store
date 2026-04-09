@@ -1,9 +1,9 @@
 package store.service;
 
-import jakarta.validation.Valid;
 import store.dto.OrderRequestDto;
+import store.dto.OrderResponseDto;
 
 public interface OrderService {
 
-    void placeOrder(@Valid OrderRequestDto orderDto);
+    OrderResponseDto placeOrder(OrderRequestDto orderDto, String username);
 }
