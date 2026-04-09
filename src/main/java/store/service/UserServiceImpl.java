@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     @Transactional
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByRoleName(Role.RoleName.ROLE_USER)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: ROLE_USER"));
         user.setRoles(Set.of(userRole));
-        return userMapper.toDto(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCart(savedUser);
+
+        return userMapper.toDto(savedUser);
     }
 }
