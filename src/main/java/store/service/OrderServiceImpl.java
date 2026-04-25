@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.dto.OrderItemResponseDto;
 import store.dto.OrderRequestDto;
 import store.dto.OrderResponseDto;
+import store.dto.OrderUpdateDto;
 import store.exception.EntityNotFoundException;
 import store.mapper.OrderItemMapper;
 import store.mapper.OrderMapper;
@@ -34,14 +37,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderDto, String username) {
         Order order = orderMapper.toEntity(orderDto);
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Set<CartItem> items = shoppingCartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"))
-                .getCartItems();
+
+        User user = getUser(username);
+
+        Set<CartItem> items = getCartItems(user.getId());
+
         if (items.isEmpty()) {
             throw new IllegalArgumentException("Shopping cart is empty");
         }
+
         Set<OrderItem> orderItems = new HashSet<>();
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CartItem item : items) {
@@ -60,11 +64,50 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(totalPrice);
         order.setOrderDate(LocalDateTime.now());
         order.setOrderItems(orderItems);
-        for (OrderItem orderItem : orderItems) {
-            System.out.println("OrderItem id = " + orderItem.getId());
-        }
         orderRepository.save(order);
         shoppingCartService.clearCart(user.getId());
         return orderMapper.toDto(order);
+    }
+
+    @Override
+    public OrderResponseDto updateOrder(OrderUpdateDto orderDto, Long id) {
+        Order order = getOrder(id);
+        order.setStatus(orderDto.getStatus());
+        orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public Set<OrderItemResponseDto> getItems(Long id) {
+        Order order = getOrder(id);
+        return order.getOrderItems().stream()
+                .map(orderItemMapper::toDto)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public OrderItemResponseDto getItemsForId(Long orderId, Long itemId) {
+        Order order = getOrder(orderId);
+        OrderItem item = order.getOrderItems().stream()
+                .filter(oi -> oi.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Item not found"));
+        return orderItemMapper.toDto(item);
+    }
+
+    private User getUser(String username) {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+    private Order getOrder(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+    }
+
+    private Set<CartItem> getCartItems(Long id) {
+        return shoppingCartRepository.findByUserId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"))
+                .getCartItems();
     }
 }

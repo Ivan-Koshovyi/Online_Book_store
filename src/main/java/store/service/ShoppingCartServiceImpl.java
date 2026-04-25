@@ -37,6 +37,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto postItem(CartItemRequestDto cartItemRequestDto, String username) {
+        if (cartItemRequestDto.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Quantity should be greater than 0");
+        }
+
         User user = getUser(username);
 
         ShoppingCart cart = getShoppingCartByUser(user);
