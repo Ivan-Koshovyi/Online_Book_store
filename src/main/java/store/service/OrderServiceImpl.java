@@ -13,11 +13,13 @@ import store.dto.OrderRequestDto;
 import store.dto.OrderResponseDto;
 import store.dto.OrderUpdateDto;
 import store.exception.EntityNotFoundException;
+import store.exception.OrderProcessingException;
 import store.mapper.OrderItemMapper;
 import store.mapper.OrderMapper;
 import store.model.CartItem;
 import store.model.Order;
 import store.model.OrderItem;
+import store.model.ShoppingCart;
 import store.model.User;
 import store.repository.OrderRepository;
 import store.repository.ShoppingCartRepository;
@@ -36,37 +38,62 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderDto, String username) {
+        User user = getUser(username);
+        ShoppingCart cart = getCart(user.getId());
+        validateCart(cart, user.getId());
+
+        Order order = createOrder(orderDto, user, cart);
+
+        orderRepository.save(order);
+        shoppingCartService.clearCart(user.getId());
+
+        return orderMapper.toDto(order);
+    }
+
+    private Order createOrder(OrderRequestDto orderDto, User user, ShoppingCart cart) {
         Order order = orderMapper.toEntity(orderDto);
 
-        User user = getUser(username);
-
-        Set<CartItem> items = getCartItems(user.getId());
-
-        if (items.isEmpty()) {
-            throw new IllegalArgumentException("Shopping cart is empty");
-        }
-
-        Set<OrderItem> orderItems = new HashSet<>();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (CartItem item : items) {
-            OrderItem orderItem = orderItemMapper.toOrderItem(item);
-            orderItem.setOrder(order);
-            orderItem.setBook(item.getBook());
-            totalPrice = totalPrice.add(
-                    orderItem.getPrice().multiply(
-                            BigDecimal.valueOf(orderItem.getQuantity())
-                    )
-            );
-            orderItems.add(orderItem);
-        }
+        Set<OrderItem> orderItems = mapToOrderItems(cart, order);
+        BigDecimal totalPrice = calculateTotal(orderItems);
         order.setUser(user);
         order.setStatus(Order.Status.NEW);
         order.setTotal(totalPrice);
         order.setOrderDate(LocalDateTime.now());
         order.setOrderItems(orderItems);
-        orderRepository.save(order);
-        shoppingCartService.clearCart(user.getId());
-        return orderMapper.toDto(order);
+
+        return order;
+    }
+
+    private Set<OrderItem> mapToOrderItems(ShoppingCart cart, Order order) {
+        return cart.getCartItems().stream()
+                .map(item -> {
+                    OrderItem orderItem = orderItemMapper.toOrderItem(item);
+                    orderItem.setOrder(order);
+                    orderItem.setBook(item.getBook());
+                    return orderItem;
+                })
+                .collect(Collectors.toSet());
+    }
+
+    private BigDecimal calculateTotal(Set<OrderItem> items) {
+        return items.stream()
+                .map(item -> item.getPrice().multiply(
+                        BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void validateCart(ShoppingCart cart, Long userId) {
+        if (cart.getCartItems().isEmpty()) {
+            throw new OrderProcessingException(
+                    "Cart is empty for userId = " + userId);
+        }
+    }
+
+    private ShoppingCart getCart(Long userId) {
+        return shoppingCartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Shopping cart not found for userId = " + userId)
+                );
     }
 
     @Override
@@ -103,11 +130,5 @@ public class OrderServiceImpl implements OrderService {
     private Order getOrder(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
-    }
-
-    private Set<CartItem> getCartItems(Long id) {
-        return shoppingCartRepository.findByUserId(id)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found"))
-                .getCartItems();
     }
 }

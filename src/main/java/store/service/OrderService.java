@@ -5,10 +5,11 @@ import store.dto.OrderItemResponseDto;
 import store.dto.OrderRequestDto;
 import store.dto.OrderResponseDto;
 import store.dto.OrderUpdateDto;
+import store.exception.OrderProcessingException;
 
 public interface OrderService {
 
-    OrderResponseDto placeOrder(OrderRequestDto orderDto, String username);
+    OrderResponseDto placeOrder(OrderRequestDto orderDto, String username) throws OrderProcessingException;
 
     OrderResponseDto updateOrder(OrderUpdateDto orderDto, Long id);
 
