@@ -2,7 +2,6 @@ package store.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import store.exception.EntityNotFoundException;
 import store.exception.OrderProcessingException;
 import store.mapper.OrderItemMapper;
 import store.mapper.OrderMapper;
-import store.model.CartItem;
 import store.model.Order;
 import store.model.OrderItem;
 import store.model.ShoppingCart;
